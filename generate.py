@@ -1,7 +1,11 @@
 import pyrosim.pyrosim as pyrosim
 
-pyrosim.Start_SDF("box.sdf") # name of file to name world
+if __name__ == "__main__":
+    pyrosim.Start_SDF("box.sdf") # name of file to name world
 
-pyrosim.Send_Cube(name="Box", pos=[0,0,0.5], size=[1,1,1]) # (x,y,z), (l,w,h)
+    length, width, height = 1, 2, 3
+    x, y, z = 0, 0, 1.5
+    pyrosim.Send_Cube(name="Box", pos=[x,y,z], 
+                      size=[length,width,height]) # (x,y,z), (l,w,h)
 
-pyrosim.End()
+    pyrosim.End()
