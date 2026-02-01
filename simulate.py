@@ -3,6 +3,7 @@ import pybullet_data
 import time
 import numpy as np
 from pyrosim import pyrosim
+import random
 
 
 
@@ -39,16 +40,16 @@ if __name__ == "__main__":
         bodyIndex = robotId,
         jointName = "Torso_BackLeg",
         controlMode = p.POSITION_CONTROL,
-        targetPosition = -3.14/6, # No movement
-        maxForce = 500)
+        targetPosition = 3.14/2 *(0.5-random.random()), # No movement
+        maxForce = 17.5)
 
         # add motor to frontleg
         pyrosim.Set_Motor_For_Joint(
         bodyIndex = robotId,
         jointName = "Torso_FrontLeg",
         controlMode = p.POSITION_CONTROL,
-        targetPosition = 3.14/6, # No movement
-        maxForce = 500)
+        targetPosition = 3.14/2 *(0.5-random.random()), # No movement
+        maxForce = 17.5)
 
     p.disconnect()
 
