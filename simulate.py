@@ -28,18 +28,26 @@ if __name__ == "__main__":
     for i in range(step_ct):
         p.stepSimulation()
 
-        time.sleep(1/60)
+        time.sleep(1/100)
 
         # add sensor to body (touch sensor on leg for touching ground)
         backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
         frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
 
-        # add motor to simulation
+        # add motor to backleg
         pyrosim.Set_Motor_For_Joint(
         bodyIndex = robotId,
         jointName = "Torso_BackLeg",
         controlMode = p.POSITION_CONTROL,
-        targetPosition = 0.0, # No movement
+        targetPosition = -3.14/6, # No movement
+        maxForce = 500)
+
+        # add motor to frontleg
+        pyrosim.Set_Motor_For_Joint(
+        bodyIndex = robotId,
+        jointName = "Torso_FrontLeg",
+        controlMode = p.POSITION_CONTROL,
+        targetPosition = 3.14/6, # No movement
         maxForce = 500)
 
     p.disconnect()
