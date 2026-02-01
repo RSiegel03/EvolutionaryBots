@@ -25,6 +25,18 @@ if __name__ == "__main__":
     frontLegSensorValues = np.zeros(step_ct)
 
 
+    # set up positions for walking backleg
+    amplitude_backleg = np.pi / 3
+    frequency_backleg =  15 # Hz
+    phase_shift_backleg = 0  # 90 degrees
+    targetAngles_backleg = (amplitude_backleg * np.sin(2 * np.pi * frequency_backleg * np.linspace(0, 1, step_ct) + phase_shift_backleg))
+
+    # set up positions for walking frontleg
+    amplitude_frontleg = np.pi / 3
+    frequency_frontleg = 15  # Hz
+    phase_shift_frontleg = np.pi /2  # 180 degrees
+    targetAngles_frontleg = (amplitude_frontleg * np.sin(2 * np.pi * frequency_frontleg * np.linspace(0, 1, step_ct) + phase_shift_frontleg))
+    
     # simulate
     for i in range(step_ct):
         p.stepSimulation()
@@ -40,7 +52,7 @@ if __name__ == "__main__":
         bodyIndex = robotId,
         jointName = "Torso_BackLeg",
         controlMode = p.POSITION_CONTROL,
-        targetPosition = 3.14/2 *(0.5-random.random()), # No movement
+        targetPosition = targetAngles_backleg[i], # No movement
         maxForce = 17.5)
 
         # add motor to frontleg
@@ -48,11 +60,13 @@ if __name__ == "__main__":
         bodyIndex = robotId,
         jointName = "Torso_FrontLeg",
         controlMode = p.POSITION_CONTROL,
-        targetPosition = 3.14/2 *(0.5-random.random()), # No movement
+        targetPosition = targetAngles_frontleg[i], # No movement
         maxForce = 17.5)
 
     p.disconnect()
 
     # save data
-    np.save("data/backLegSensorValues.npy", backLegSensorValues)
-    np.save("data/frontLegSensorValues.npy", frontLegSensorValues)
+    # np.save("data/backLegSensorValues.npy", backLegSensorValues)
+    # np.save("data/frontLegSensorValues.npy", frontLegSensorValues)
+    # np.save("data/targetAngles_backleg.npy", targetAngles_backleg)
+    # np.save("data/targetAngles_frontleg.npy", targetAngles_frontleg)
