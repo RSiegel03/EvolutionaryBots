@@ -36,7 +36,8 @@ class SIMULATION:
 
             # sense and act
             self.robot.Sense(i)
-            self.robot.Act(i)
+            self.robot.Think()
+            self.robot.Act()
 
 
 
