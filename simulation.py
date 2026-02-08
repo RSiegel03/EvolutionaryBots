@@ -29,7 +29,6 @@ class SIMULATION:
     def Run(self):
         # simulate
         for i in range(c.SIMULATION_STEPS):
-            # print(i)
             p.stepSimulation()
 
             time.sleep(c.TIME_STEP)
