@@ -5,17 +5,36 @@ import os
 class SOLUTION:
     def __init__(self):
         self.weights = np.random.rand(3,2) * 2 -1
+        self.directOrGUI = "DIRECT" # default to DIRECT, can be set to "GUI" when creating an instance of SOLUTION
 
 
-    def Evaluate(self):
+
+    def Evaluate(self, directOrGUI = "DIRECT"):
         # simulate
         self.Create_World()
         self.Generate_Body()
         self.Generate_Brain()
 
         # simulate
-        os.system("python3 simulate.py")
+        if directOrGUI.upper() not in ["DIRECT", "GUI"]:
+            raise ValueError("Invalid argument for directOrGUI. Use 'DIRECT' or 'GUI'.")
+        self.directOrGUI = directOrGUI.upper()
+        os.system(f"python3 simulate.py {self.directOrGUI}")
 
+        # read fitness from file
+        fitnessFile = "fitness.txt"
+        with open(fitnessFile, "r") as f:
+            self.fitness = float(f.read())
+            f.close()
+
+    # mutate
+    def mutate(self):
+        randomRow = np.random.randint(0, self.weights.shape[0])
+        randomCol = np.random.randint(0, self.weights.shape[1])
+
+        self.weights[randomRow, randomCol] = np.random.rand() * 2 - 1
+
+    # create world, body, brain
     def Generate_Body(self):
         pyrosim.Start_URDF("body.urdf") # name of file to name robot
         pyrosim.Send_Cube(name="Torso", pos=[1.5,0,1.5], 

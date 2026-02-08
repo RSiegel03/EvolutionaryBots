@@ -1,3 +1,4 @@
+import time
 import pybullet as p
 import pybullet_data
 import constants as c
@@ -45,4 +46,13 @@ class ROBOT:
 
     def Think(self):
         self.nn.Update()
-        self.nn.Print()
+        # self.nn.Print()
+
+    def Get_Fitness(self):
+        stateOfLinkZero = p.getLinkState(self.robotId, 0)
+        positionOfLinkZero = stateOfLinkZero[0] 
+        xCoordinateOfLinkZero = positionOfLinkZero[0]
+
+        # store fitness in file
+        with open("fitness.txt", "w") as f:
+            f.write(str(xCoordinateOfLinkZero))

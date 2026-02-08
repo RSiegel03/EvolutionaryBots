@@ -9,9 +9,12 @@ import time
 import numpy as np
 
 class SIMULATION:
-    def __init__(self):
+    def __init__(self, directOrGUI):
         # Initialize PyBullet physics client
-        self.physicsClient = p.connect(p.GUI)    
+        if directOrGUI == "GUI":
+            self.physicsClient = p.connect(p.GUI)
+        else:
+            self.physicsClient = p.connect(p.DIRECT)  # Use DIRECT for non-graphical version
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
         # init environment
@@ -26,21 +29,27 @@ class SIMULATION:
         self.robot.Prepare_To_Sense()
         self.robot.Prepare_To_Act()
 
-    def Run(self):
+    def Run(self, timeStep = c.TIME_STEP, simulationSteps = c.SIMULATION_STEPS):
         # simulate
-        for i in range(c.SIMULATION_STEPS):
+        for i in range(simulationSteps):
             p.stepSimulation()
 
-            time.sleep(c.TIME_STEP)
+            time.sleep(timeStep)
 
             # sense and act
             self.robot.Sense(i)
             self.robot.Think()
             self.robot.Act()
 
+            #evalulat
+            self.Get_Fitness()
+
 
 
     def __del__(self):
         p.disconnect()
         self.robot.Save_Values()
+
+    def Get_Fitness(self):
+        self.robot.Get_Fitness()
 
