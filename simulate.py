@@ -7,8 +7,4 @@ if __name__ == "__main__":
 
     simulation = SIMULATION(directOrGUI)
 
-    if directOrGUI.upper() == "GUI":
-        timestep = c.TIME_STEP
-    else:
-        timestep = 0
-    simulation.Run(timeStep=timestep)
+    simulation.Run()

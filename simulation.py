@@ -11,7 +11,8 @@ import numpy as np
 class SIMULATION:
     def __init__(self, directOrGUI):
         # Initialize PyBullet physics client
-        if directOrGUI == "GUI":
+        self.directOrGUI = directOrGUI.upper()
+        if self.directOrGUI == "GUI":
             self.physicsClient = p.connect(p.GUI)
         else:
             self.physicsClient = p.connect(p.DIRECT)  # Use DIRECT for non-graphical version
@@ -29,12 +30,13 @@ class SIMULATION:
         self.robot.Prepare_To_Sense()
         self.robot.Prepare_To_Act()
 
-    def Run(self, timeStep = c.TIME_STEP, simulationSteps = c.SIMULATION_STEPS):
+    def Run(self):
         # simulate
-        for i in range(simulationSteps):
+        for i in range(c.SIMULATION_STEPS):
             p.stepSimulation()
 
-            time.sleep(timeStep)
+            if self.directOrGUI == "GUI":
+                time.sleep(c.TIME_STEP)
 
             # sense and act
             self.robot.Sense(i)

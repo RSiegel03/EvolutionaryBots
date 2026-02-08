@@ -16,9 +16,11 @@ class SOLUTION:
         self.Generate_Brain()
 
         # simulate
-        if directOrGUI.upper() not in ["DIRECT", "GUI"]:
-            raise ValueError("Invalid argument for directOrGUI. Use 'DIRECT' or 'GUI'.")
-        self.directOrGUI = directOrGUI.upper()
+        if directOrGUI.upper() == "GUI":
+            self.directOrGUI = "GUI"
+        else:
+            self.directOrGUI = "DIRECT"
+
         os.system(f"python3 simulate.py {self.directOrGUI}")
 
         # read fitness from file
