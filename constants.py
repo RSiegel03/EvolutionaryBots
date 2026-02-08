@@ -3,7 +3,7 @@ import numpy as np
 
 # variables/constants for simulation
 # WORLD CONSTANTS
-TIME_STEP = 1/100  # seconds
+TIME_STEP = 1/250  # seconds
 GRAVITYZ = -9.8     # m/s^2
 SIMULATION_STEPS = 1000  # number of simulation steps
 
