@@ -1,9 +1,10 @@
 # run simulate and generate.py 
 import os
-from hillclimber import HILL_CLIMBER
+from parallelHillClimber import PARALLEL_HILL_CLIMBER
 
-hc = HILL_CLIMBER()
-hc.Evolve()
+phc = PARALLEL_HILL_CLIMBER()
+phc.Evolve()
+phc.Show_Best()
 
 # for _ in range(2):
 #     os.system("python3 generate.py")

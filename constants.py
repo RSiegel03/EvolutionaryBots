@@ -16,3 +16,4 @@ ROBOT_PHASE_SHIFT = 0  # radians
 
 # HILL CLIMBER CONSTANTS
 numberOfGenerations = 25
+populationSize = 2

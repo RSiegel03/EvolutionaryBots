@@ -7,13 +7,16 @@ from sensor import SENSOR
 from motor import MOTOR
 import numpy as np
 from pyrosim.neuralNetwork import NEURAL_NETWORK
+import os
 
 class ROBOT:
-    def __init__(self):
+    def __init__(self, solutionID):
+        self.solutionID = solutionID
         self.robotId  = p.loadURDF("body.urdf")
 
-        self.nn = NEURAL_NETWORK("brain.nndf")
-
+        self.nn = NEURAL_NETWORK(f"brain{solutionID}.nndf")
+        
+        os.system(f"rm brain{solutionID}.nndf")  # Clean up the brain file after loading it
 
     def Prepare_To_Sense(self):
         self.sensors = dict()
@@ -54,5 +57,7 @@ class ROBOT:
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
         # store fitness in file
-        with open("fitness.txt", "w") as f:
+        with open(f"tmp{self.solutionID}.txt", "w") as f:
             f.write(str(xCoordinateOfLinkZero))
+        
+        os.system(f"mv tmp{self.solutionID}.txt fitness{self.solutionID}.txt")  # Rename the temporary file to the final fitness file

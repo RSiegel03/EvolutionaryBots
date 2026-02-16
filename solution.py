@@ -1,15 +1,18 @@
 import pyrosim.pyrosim as pyrosim
 import numpy as np
 import os
+import time
 
 class SOLUTION:
-    def __init__(self):
+    def __init__(self, id):
+        self.myID = id
         self.weights = np.random.rand(3,2) * 2 -1
         self.directOrGUI = "DIRECT" # default to DIRECT, can be set to "GUI" when creating an instance of SOLUTION
 
+    def Set_ID(self, id):
+        self.myID = id
 
-
-    def Evaluate(self, directOrGUI = "DIRECT"):
+    def Start_Simulation(self, directOrGUI = "DIRECT"):
         # simulate
         self.Create_World()
         self.Generate_Body()
@@ -19,13 +22,18 @@ class SOLUTION:
         if directOrGUI.upper() not in ["DIRECT", "GUI"]:
             raise ValueError("Invalid argument for directOrGUI. Use 'DIRECT' or 'GUI'.")
         self.directOrGUI = directOrGUI.upper()
-        os.system(f"python3 simulate.py {self.directOrGUI}")
+        os.system("python3 simulate.py " + self.directOrGUI + " " + str(self.myID) + " &")
 
+    def Wait_For_Simulation_To_End(self):
         # read fitness from file
-        fitnessFile = "fitness.txt"
+        fitnessFile = f"fitness{self.myID}.txt"
+        while not os.path.exists(fitnessFile):
+            time.sleep(0.01)
         with open(fitnessFile, "r") as f:
             self.fitness = float(f.read())
             f.close()
+
+        # os.system(f"rm {fitnessFile}")  # Clean up the fitness file after reading it
 
     # mutate
     def mutate(self):
@@ -50,7 +58,7 @@ class SOLUTION:
         pyrosim.End()
 
     def Generate_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf") # name of file to name robot
+        pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf") # name of file to name robot
 
         # create sensor neurons
         pyrosim.Send_Sensor_Neuron(name = 0, linkName = "Torso")

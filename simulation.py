@@ -9,7 +9,7 @@ import time
 import numpy as np
 
 class SIMULATION:
-    def __init__(self, directOrGUI):
+    def __init__(self, directOrGUI, solutionID):
         # Initialize PyBullet physics client
         if directOrGUI == "GUI":
             self.physicsClient = p.connect(p.GUI)
@@ -22,7 +22,7 @@ class SIMULATION:
 
         #load world and robot
         self.world = WORLD()
-        self.robot = ROBOT()
+        self.robot = ROBOT(solutionID)
 
         # Prepare Pyrosim for simulation
         pyrosim.Prepare_To_Simulate(self.robot.robotId)
@@ -41,8 +41,8 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act()
 
-            #evalulat
-            self.Get_Fitness()
+        #evalulate final state
+        self.Get_Fitness()
 
 
 
