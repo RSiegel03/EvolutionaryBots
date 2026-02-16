@@ -22,7 +22,7 @@ class SOLUTION:
         if directOrGUI.upper() not in ["DIRECT", "GUI"]:
             raise ValueError("Invalid argument for directOrGUI. Use 'DIRECT' or 'GUI'.")
         self.directOrGUI = directOrGUI.upper()
-        os.system("python3 simulate.py " + self.directOrGUI + " " + str(self.myID) + " &")
+        os.system("python3 simulate.py " + self.directOrGUI + " " + str(self.myID) + " > /dev/null 2>&1 &")
 
     def Wait_For_Simulation_To_End(self):
         # read fitness from file
@@ -33,7 +33,7 @@ class SOLUTION:
             self.fitness = float(f.read())
             f.close()
 
-        # os.system(f"rm {fitnessFile}")  # Clean up the fitness file after reading it
+        os.system(f"rm {fitnessFile}")  # Clean up the fitness file after reading it
 
     # mutate
     def mutate(self):
