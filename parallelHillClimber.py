@@ -9,6 +9,7 @@ import time
 import numpy as np
 from solution import SOLUTION
 import copy
+import os
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
@@ -18,46 +19,56 @@ class PARALLEL_HILL_CLIMBER:
             self.parents[i] = SOLUTION(self.nextAvailableID)
             self.nextAvailableID += 1
 
-        
-        # self.parent = SOLUTION()
-        # self.parent.Evaluate("gui")
     
     def Evolve(self):
-        for parent_idx in self.parents:
-            self.parents[parent_idx].Start_Simulation("gui")
+        # generate initial population and evaluate fitness
+        self.Evaluate(self.parents)
         
-        for parent_idx in self.parents:
-            self.parents[parent_idx].Wait_For_Simulation_To_End()
-            print(f"Parent {parent_idx} fitness: {self.parents[parent_idx].fitness}")
-        
-        # for currentGeneration in range(c.numberOfGenerations):
-        #     self.Evolve_For_One_Generation()
+        # run generations
+        for currentGeneration in range(c.numberOfGenerations):
+            self.Evolve_For_One_Generation()
     
     def Evolve_For_One_Generation(self):
         self.Spawn()
         self.Mutate()
-        self.child.Evaluate()
+        self.Evaluate(self.children)
         self.Print()
         self.Select()
 
     def Spawn(self):
-        self.child = copy.deepcopy(self.parent)
-        self.child.Set_ID(self.nextAvailableID)
-        self.nextAvailableID += 1
+        self.children = {}
+        for parent_idx in self.parents:
+            self.children[parent_idx] = copy.deepcopy(self.parents[parent_idx])
+            self.children[parent_idx].Set_ID(self.nextAvailableID)
+            self.nextAvailableID += 1
+        
 
     def Mutate(self):
-        self.child.mutate()
+        for child_idx in self.children:
+            self.children[child_idx].mutate()
         
     def Print(self):
-        print("\n\nParent fitness: " + str(self.parent.fitness))
-        print("Child fitness: " + str(self.child.fitness)+"\n")
+        for parent_idx in self.parents:
+            print(f"Parent {parent_idx:>2d} fitness: {self.parents[parent_idx].fitness:>12.6f}  -- Child {parent_idx:>2d} fitness: {self.children[parent_idx].fitness:>12.6f}")
+        print() 
 
     def Select(self):
-        if self.child.fitness > self.parent.fitness:
-            self.parent = copy.deepcopy(self.child)
+        for parent_idx in self.parents:
+            if self.children[parent_idx].fitness < self.parents[parent_idx].fitness:
+                self.parents[parent_idx] = copy.deepcopy(self.children[parent_idx])
+
+    def Evaluate(self, solutions):
+        for sol_idx in solutions:
+            solutions[sol_idx].Start_Simulation()
+        
+        for sol_idx in solutions:
+            solutions[sol_idx].Wait_For_Simulation_To_End()
+        
 
     def Show_Best(self):
-        pass
-        # self.parent.Evaluate("gui")
+        best_parent_idx = min(self.parents, key=lambda idx: self.parents[idx].fitness)
+        self.parents[best_parent_idx].Start_Simulation("gui")
+        
+        os.system("rm fitness*.txt")  # Clean up any remaining fitness files after showing the best solution
 
     

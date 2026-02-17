@@ -15,5 +15,5 @@ ROBOT_FREQUENCY = 10  # Hz
 ROBOT_PHASE_SHIFT = 0  # radians
 
 # HILL CLIMBER CONSTANTS
-numberOfGenerations = 25
-populationSize = 2
+numberOfGenerations = 10
+populationSize = 10
