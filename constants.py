@@ -13,7 +13,9 @@ MAX_MOTOR_FORCE = 17.5  # Newtons
 ROBOT_AMPLITUDE = np.pi / 3  # radians
 ROBOT_FREQUENCY = 10  # Hz
 ROBOT_PHASE_SHIFT = 0  # radians
+numSensorNeurons = 3
+numMotorNeurons = 2
 
 # HILL CLIMBER CONSTANTS
-numberOfGenerations = 10
-populationSize = 10
+numberOfGenerations = 1
+populationSize = 1

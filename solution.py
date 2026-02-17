@@ -2,11 +2,12 @@ import pyrosim.pyrosim as pyrosim
 import numpy as np
 import os
 import time
+import constants as c
 
 class SOLUTION:
     def __init__(self, id):
         self.myID = id
-        self.weights = np.random.rand(3,2) * 2 -1
+        self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons) * 2 -1
         self.directOrGUI = "DIRECT" # default to DIRECT, can be set to "GUI" when creating an instance of SOLUTION
 
     def Set_ID(self, id):
@@ -45,7 +46,7 @@ class SOLUTION:
     # create world, body, brain
     def Generate_Body(self):
         pyrosim.Start_URDF("body.urdf") # name of file to name robot
-        pyrosim.Send_Cube(name="Torso", pos=[1.5,0,1.5], 
+        pyrosim.Send_Cube(name="Torso", pos=[0,0,1], 
                                     size=[1,1,1])
         pyrosim.Send_Joint(name = "Torso_BackLeg" , parent= "Torso" , child = "BackLeg" , type = "revolute", position = [1,0,1])
         pyrosim.Send_Cube(name="BackLeg", pos=[-0.5,0, -0.5], 
@@ -72,7 +73,7 @@ class SOLUTION:
         # create synapses
         for currentRow in range(self.weights.shape[0]): # names of sensor neurons
             for currentColumn in range(self.weights.shape[1]): # names of motor neurons
-                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn+3, weight = self.weights[currentRow,currentColumn])
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn+c.numSensorNeurons, weight = self.weights[currentRow,currentColumn])
         
         # end
         pyrosim.End()
